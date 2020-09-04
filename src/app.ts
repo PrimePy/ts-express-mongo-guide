@@ -1,16 +1,19 @@
 import express, {Application, Router} from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 
 
 class App{
 
 	public app: Application;
-	public port: number;
 
-	constructor(routers: any, port: number){
+	constructor(routers: any){
 		this.app = express();
-		this.port = port;
 
+		( async()=> {
+			await this.initializeDatabase().then(()=> console.log('DB Connected'));
+		})();
+		
 		this.initializeMiddlewares();
 		this.initializeRouters(routers);
 	}
@@ -25,9 +28,25 @@ class App{
 		});
 	}
 
+	private async initializeDatabase() {
+    	const {
+      		MONGO_USER,
+      		MONGO_PASSWORD,
+      		MONGO_DATABASE,
+    	} = process.env;
+
+    	await mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@primz0.vz97p.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority`, 
+			{
+				useNewUrlParser: true,
+				useUnifiedTopology: true,
+				useCreateIndex: true
+			}
+		);
+	}
+
 	public listen(){
-		this.app.listen(this.port, () => {
-      		console.log(`App listening on the port ${this.port}`);
+		this.app.listen(process.env.PORT, () => {
+      		console.log(`App listening on the port ${process.env.PORT}`);
     	});
 	}
 

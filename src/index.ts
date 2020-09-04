@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import App from './app';
 
 import { routers } from './router';
 
-const app = new App( routers , 5000);
+dotenv.config();
+
+const app = new App( routers );
  
 app.listen();
 
