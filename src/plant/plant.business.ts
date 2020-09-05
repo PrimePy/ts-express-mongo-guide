@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction} from 'express';
 import Plant from './plant.interface';
 import plantModel from './plant.model';
+import PlantNotFoundException from '../exceptions/PlantNotFoundException';
 
 
 class PlantBusiness {
@@ -10,10 +11,11 @@ class PlantBusiness {
 		res.send(plants);
 	}
 
-	public getPlantById = async (req: Request, res: Response) => {
+	public getPlantById = async (req: Request, res: Response, next: NextFunction) => {
 		const plantId = req.params.id;
 		const plant = await plantModel.findById(plantId);
-		res.send(plant);
+		plant ?  res.send(plant): next( new PlantNotFoundException(plantId));
+		
 	}
 
 	public createPlant = async (req: Request, res: Response) => {
@@ -23,17 +25,17 @@ class PlantBusiness {
 		res.send(savedPlant);
 	}
 
-	public updatePlant = async (req: Request, res: Response) => {
+	public updatePlant = async (req: Request, res: Response, next: NextFunction) => {
 		const plantId = req.params.id;
 		const plant: Plant = req.body;
 		const updatePlant = await plantModel.findByIdAndUpdate(plantId, plant, { new: true});
-		res.send(updatePlant);
+		updatePlant ?  res.send(updatePlant): next( new PlantNotFoundException(plantId));
 	}
 
-	public deletePlant = async (req: Request, res: Response) => {
+	public deletePlant = async (req: Request, res: Response, next: NextFunction) => {
 		const plantId = req.params.id;
 		const deleteStatus = await plantModel.findByIdAndDelete(plantId);
-		return deleteStatus ?  res.send(200):  res.send(404);
+		deleteStatus ?  res.send(200): next( new PlantNotFoundException(plantId));
 	}
 
 }

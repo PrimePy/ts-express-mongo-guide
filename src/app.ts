@@ -1,6 +1,7 @@
 import express, {Application, Router} from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import errorMiddleware from './middlewares/error.middleware';
 
 
 class App{
@@ -20,6 +21,7 @@ class App{
 
 	private initializeMiddlewares() {
 		this.app.use(bodyParser.json());
+		this.app.use(errorMiddleware);
 	}
 
 	private initializeRouters(routers: any){
@@ -39,7 +41,8 @@ class App{
 			{
 				useNewUrlParser: true,
 				useUnifiedTopology: true,
-				useCreateIndex: true
+				useCreateIndex: true,
+				useFindAndModify: false
 			}
 		);
 	}
