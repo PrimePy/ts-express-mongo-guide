@@ -4,6 +4,7 @@ interface Plant {
 	category: string;
 	price: number;
 	description: string;
+	userId: any;
 	avatar: string;
 
 }

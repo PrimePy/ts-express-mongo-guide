@@ -24,6 +24,14 @@ const plantSchema = new Schema({
 		required: true,
 		type: String,
 		trim: true
+	},
+	userId: {
+		required: true,
+		type: Schema.Types.ObjectId
+	},
+	date: { 
+		type: Date,
+		default: Date.now
 	}
 });
 

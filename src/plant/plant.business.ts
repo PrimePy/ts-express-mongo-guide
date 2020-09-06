@@ -2,6 +2,7 @@ import { Request, Response, NextFunction} from 'express';
 import Plant from './plant.interface';
 import plantModel from './plant.model';
 import PlantNotFoundException from '../exceptions/PlantNotFoundException';
+import RequestPayload from '../interfaces/request.payload.interface';
 
 
 class PlantBusiness {
@@ -20,7 +21,12 @@ class PlantBusiness {
 
 	public createPlant = async (req: Request, res: Response) => {
 		const plant: Plant = req.body;
-		const createPlant = new plantModel(plant);
+		const requestPayload: RequestPayload = req as RequestPayload;
+		console.log(requestPayload.user);
+		const createPlant = await plantModel.create({
+			...plant,
+			userId: requestPayload.user._id
+		});
 		const savedPlant = await createPlant.save();
 		res.send(savedPlant);
 	}

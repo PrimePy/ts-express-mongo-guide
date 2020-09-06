@@ -1,4 +1,4 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsInt, IsString, IsMongoId } from 'class-validator';
 
 class PlantDto {
 
@@ -13,6 +13,9 @@ class PlantDto {
 
 	@IsString()
 	public description: string;
+
+	@IsMongoId()
+	public userId: any;
 
 	@IsString()
 	public avatar: string;

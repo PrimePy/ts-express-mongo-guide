@@ -1,7 +1,9 @@
 import express, {Application, Router} from 'express';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import errorMiddleware from './middlewares/error.middleware';
+import cors from 'cors';
 
 
 class App{
@@ -21,6 +23,8 @@ class App{
 
 	private initializeMiddlewares() {
 		this.app.use(bodyParser.json());
+		this.app.use(cookieParser());
+		this.app.use(cors());
 		this.app.use(errorMiddleware);
 	}
 
